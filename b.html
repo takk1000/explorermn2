@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>North Shore Explorer</title>
+    <meta name="description" content="Your guide to Minnesota's North Shore experiences">
+    <meta name="theme-color" content="#2c4c3b">
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTm9ydGggU2hvcmUgRXhwbG9yZXIiLCJzaG9ydF9uYW1lIjoiTm9ydGggU2hvcmUiLCJkZXNjcmlwdGlvbiI6IlRyYXZlbCBHdWlkZSBmb3IgTm9ydGggU2hvcmUsIE1OIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwidGhlbWVfY29sb3IiOiIjMmM0YzNiIiwiYmFja2dyb3VuZF9jb2xvciI6IiMyYzRjM2YiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFBRUFBQUFCQ0FZQUFBQmx0dHdKQUFBQUFYTlNSMElBcnM0YzZRQUFJQUJKUkVGVWVOeDdXWmhBUUFBQUFCSlJVNUVZR1p2QjJhMEFBQUFBQVdOQk1WRVVBQUFBRCIsInNpemVzIjoiNDh4NDgiLCJ0eXBlIjoiaW1hZ2UvcG5nIn1dfQ==">
+    <style>
+        :root {
+            --primary: #2c4c3b;
+            --secondary: #5d8b66;
+            --accent: #c9a66b;
+            --light: #f8f5f0;
+            --dark: #1a1a1a;
+            --font-main: 'Helvetica Neue', Arial, sans-serif;
+            --font-heading: Georgia, 'Times New Roman', serif;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 2rem;
+            --spacing-lg: 3rem;
+            --border-radius: 4px;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-main);
+            color: var(--dark);
+            background-color: var(--light);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: var(--spacing-sm);
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        h1, h2, h3 {
+            font-family: var(--font-heading);
+            font-weight: normal;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: var(--spacing-xs);
+            margin-top: var(--spacing-md);
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+        
+        section {
+            padding: var(--spacing-md);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        p {
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .container {
+            padding: var(--spacing-sm);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--dark);
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            margin: var(--spacing-xs) 0;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+            box-shadow: var(--shadow);
+        }
+        
+        .card h3 {
+            margin-top: 0;
+        }
+        
+        .map-container {
+            width: 100%;
+            height: 300px;
+            background-color: #e9e5de;
+            border-radius: var(--border-radius);
+            margin: var(--spacing-sm) 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .map-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .location-marker {
+            fill: var(--accent);
+            stroke: var(--primary);
+            stroke-width: 2;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .location-marker:hover {
+            fill: var(--primary);
+        }
+        
+        .flex-row {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+            margin: var(--spacing-sm) 0;
+        }
+        
+        .flex-item {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: flex-end;
+        }
+        
+        .modal-content {
+            background-color: white;
+            width: 90%;
+            max-width: 400px;
+            height: 100%;
+            padding: var(--spacing-md);
+            overflow-y: auto;
+            transform: translateX(100%);
+            animation: slideIn 0.3s forwards;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+        }
+        
+        @keyframes slideIn {
+            to { transform: translateX(0); }
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: var(--spacing-sm);
+            right: var(--spacing-sm);
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+        
+        .coupon-item, .tour-item {
+            padding: var(--spacing-sm);
+            border-bottom: 1px solid #eee;
+        }
+        
+        .coupon-item:last-child, .tour-item:last-child {
+            border-bottom: none;
+        }
+        
+        select {
+        font-family: var(--font-main);
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius);
+        background-color: white;
+        color: var(--dark);
+        cursor: pointer;
+        }
+        
+        select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(201, 166, 107, 0.3);
+        }
+        
+        .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-align: center;
+            margin: var(--spacing-md) 0;
+        }
+        
+        .journal-entry {
+            background: white;
+            padding: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .entry-author {
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .entry-date {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .offline-warning {
+            background-color: #ffcc00;
+            color: var(--dark);
+            padding: var(--spacing-xs);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: var(--spacing-sm);
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        @media (min-width: 768px) {
+            .btn {
+                width: auto;
+            }
+            
+            .flex-row {
+                flex-wrap: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="offline-warning" class="offline-warning" style="display:none;">
+        You are currently offline. Some features may be limited.
+    </div>
+    
+    <header>
+        <h1>North Shore Explorer</h1>
+    </header>
+    
+    <section>
+        <div class="map-container">
+            <svg class="map-svg" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+                <!-- Simplified North Shore map -->
+                <path d="M50,150 C100,120 150,100 200,120 C250,140 300,180 350,170 C400,160 450,140 500,150 C550,160 600,190 650,200 C700,210 750,180 780,160" 
+                      fill="none" stroke="#5d8b66" stroke-width="4" stroke-linecap="round" />
+                
+                <!-- Points of interest -->
+                <circle class="location-marker" cx="100" cy="120" r="8" data-name="Gooseberry Falls" data-desc="Spectacular waterfalls and hiking trails" />
+                <circle class="location-marker" cx="300" cy="180" r="8" data-name="Split Rock Lighthouse" data-desc="Historic lighthouse with stunning views" />
+                <circle class="location-marker" cx="500" cy="150" r="8" data-name="Tettegouche State Park" data-desc="Cliffs, inland lakes, and waterfalls" />
+                <circle class="location-marker" cx="650" cy="200" r="8" data-name="Grand Marais" data-desc="Artistic harbor town with great dining" />
+            </svg>
+        </div>
+        
+        <h2>Nearby Attractions</h2>
+        <div id="nearby-list">
+            <!-- Nearby locations will be populated here -->
+        </div>
+        
+        <div class="flex-row">
+            <div class="flex-item">
+                <button id="coupon-btn" class="btn">Local Coupons</button>
+            </div>
+            <div class="flex-item">
+                <button id="tour-btn" class="btn btn-secondary">Book a Tour</button>
+            </div>
+        </div>
+        
+        <h2>Travel Journal</h2>
+        <div id="journal-entries">
+            <div class="journal-entry">
+                <div class="entry-header">
+                    <span class="entry-author">Sarah J.</span>
+                    <span class="entry-date">June 15, 2025</span>
+                </div>
+                <p>Hiked to High Falls at Grand Portage State Park - absolutely breathtaking! The trail was well-maintained and suitable for our 8-year-old.</p>
+            </div>
+            <div class="journal-entry">
+                <div class="entry-header">
+                    <span class="entry-author">Mike T.</span>
+                    <span class="entry-date">June 12, 2025</span>
+                </div>
+                <p>The guided kayak tour from Tofte was the highlight of our trip. Saw eagles and learned about the local ecosystem from our knowledgeable guide.</p>
+            </div>
+        </div>
+        
+        <button id="add-entry" class="btn">Add Your Experience</button>
+    </section>
+    
+<!-- Coupon Modal -->
+<div id="coupon-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Local Coupons</h2>
+        <div class="card" style="background-color: var(--accent); color: var(--dark); margin-bottom: var(--spacing-md);">
+            <h3>North Shore Coupon Booklet</h3>
+            <p>Get our exclusive coupon booklet with over 50 discounts from local businesses!</p>
+            <p><strong>Only $19.99</strong> (saves $200+ on your trip)</p>
+            <button id="buy-booklet" class="btn" style="background-color: var(--primary); color: white;">Purchase Booklet</button>
+        </div>
+        <!--
+        <h3>Sample Coupons</h3>
+        <div id="coupon-list">
+            <!-- Coupons will be loaded here -->
+        <!--</div>
+        -->
+    </div>
+</div>
+    
+    <!-- Tour Modal -->
+    <!-- Tour Modal -->
+<div id="tour-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Book a Tour</h2>
+        <div class="map-container">
+            <svg class="map-svg" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50,100 C150,80 250,120 350,100 C450,80 550,120 650,100" 
+                      fill="none" stroke="#c9a66b" stroke-width="6" stroke-linecap="round" stroke-dasharray="10,5" />
+                <circle cx="150" cy="80" r="8" fill="#c9a66b" />
+                <circle cx="350" cy="100" r="8" fill="#c9a66b" />
+                <circle cx="550" cy="120" r="8" fill="#c9a66b" />
+            </svg>
+        </div>
+        <div class="card">
+            <h3>Family North Shore Adventure</h3>
+            <p><strong>Meeting Place:</strong> Gooseberry Falls Visitor Center</p>
+            <p><strong>Tour Duration:</strong> 2 hours</p>
+            <p><strong>Price:</strong> $25 per adult, $15 per child</p>
+            
+            <label for="family-size" style="display: block; margin: var(--spacing-sm) 0 var(--spacing-xs);">Family Size:</label>
+            <select id="family-size" class="btn" style="width: 100%; padding: 0.8rem; margin-bottom: var(--spacing-sm);">
+                <option value="1a">1 Adult</option>
+                <option value="1a1c">1 Adult + 1 Child</option>
+                <option value="2a">2 Adults</option>
+                <option value="2a1c" selected>2 Adults + 1 Child</option>
+                <option value="2a2c">2 Adults + 2 Children</option>
+                <option value="2a3c">2 Adults + 3 Children</option>
+                <option value="large">Large Group (6+ people)</option>
+            </select>
+            
+            <p><strong>Next Tour:</strong></p>
+            <div class="timer" id="tour-timer">00:00:00</div>
+        </div>
+        <button id="confirm-tour" class="btn btn-secondary">Confirm Booking</button>
+    </div>
+</div>
+    
+    <footer>
+        <p>© 2025 North Shore Explorer | Offline Ready</p>
+    </footer>
+    
+    <script>
+        // App data stored in IndexedDB for offline use
+        const dbName = "NorthShoreDB";
+        const storeName = "PointsOfInterest";
+        
+        // Initialize database
+        let db;
+        const initDB = () => {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(dbName, 1);
+                
+                request.onupgradeneeded = (event) => {
+                    db = event.target.result;
+                    if (!db.objectStoreNames.contains(storeName)) {
+                        const store = db.createObjectStore(storeName, { keyPath: "id" });
+                        store.createIndex("name", "name", { unique: false });
+                        store.createIndex("location", "location", { unique: false });
+                    }
+                };
+                
+                request.onsuccess = (event) => {
+                    db = event.target.result;
+                    resolve(db);
+                };
+                
+                request.onerror = (event) => {
+                    reject("Error opening database");
+                };
+            });
+        };
+        
+        // Add data to IndexedDB
+        const addPOIToDB = (poi) => {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], "readwrite");
+                const store = transaction.objectStore(storeName);
+                
+                const request = store.put(poi);
+                
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject("Error adding POI");
+            });
+        };
+        
+        // Get data from IndexedDB
+        const getPOIFromDB = () => {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], "readonly");
+                const store = transaction.objectStore(storeName);
+                const request = store.getAll();
+                
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject("Error getting POI");
+            });
+        };
+        
+        // Sample Points of Interest data
+        const pointsOfInterest = [
+            {
+                id: 1,
+                name: "Gooseberry Falls",
+                description: "Spectacular waterfalls with hiking trails for all skill levels",
+                location: { lat: 47.142, lng: -91.466 },
+                category: "Nature"
+            },
+            {
+                id: 2,
+                name: "Split Rock Lighthouse",
+                description: "Historic lighthouse with stunning Lake Superior views",
+                location: { lat: 47.200, lng: -91.366 },
+                category: "Historic"
+            },
+            {
+                id: 3,
+                name: "Tettegouche State Park",
+                description: "Cliffs, inland lakes, and waterfalls in a pristine setting",
+                location: { lat: 47.231, lng: -91.359 },
+                category: "Nature"
+            },
+            {
+                id: 4,
+                name: "Grand Marais Art Colony",
+                description: "Art galleries and workshops in a picturesque harbor town",
+                location: { lat: 47.750, lng: -90.334 },
+                category: "Cultural"
+            },
+            {
+                id: 5,
+                name: "Superior Hiking Trail",
+                description: "300+ mile trail with breathtaking Lake Superior views",
+                location: { lat: 47.500, lng: -91.000 },
+                category: "Adventure"
+            }
+        ];
+        
+        // Simulated coupon data (would normally come from Google Sheets)
+        const coupons = [
+            {
+                business: "Betty's Pies",
+                location: "1633 Highway 61, Two Harbors",
+                info: "15% off any pie purchase",
+                code: "NSX15"
+            },
+            {
+                business: "Cascade Lodge Restaurant",
+                location: "3719 MN-61, Lutsen",
+                info: "Free appetizer with two entrees",
+                code: "NSXAPP"
+            },
+            {
+                business: "Sven & Ole's Pizza",
+                location: "9 Wisconsin St, Grand Marais",
+                info: "Buy one pizza, get second 50% off",
+                code: "NSXPIZZA"
+            },
+            {
+                business: "Naniboujou Lodge",
+                location: "20 Naniboujou Trail, Grand Marais",
+                info: "$20 off any room booking",
+                code: "NSXROOM"
+            }
+        ];
+
+        // Buy coupon booklet
+        document.getElementById('buy-booklet').addEventListener('click', () => {
+            alert('Coupon booklet added to cart! Proceed to checkout to complete your purchase.');
+            closeModals();
+        });
+
+        // Update tour price based on family size
+      document.getElementById('family-size').addEventListener('change', function() {
+      const prices = {
+          '1a': '$25',
+          '1a1c': '$40',
+          '2a': '$50',
+          '2a1c': '$65',
+          '2a2c': '$80',
+          '2a3c': '$95',
+          'large': 'Contact for pricing'
+      };
+
+    const priceDisplay = document.querySelector('#tour-modal .card p:nth-of-type(3)');
+    priceDisplay.innerHTML = `<strong>Price:</strong> ${prices[this.value]}`;
+});
+        
+        // Initialize the app
+        const initApp = async () => {
+            // Initialize IndexedDB
+            await initDB();
+            
+            // Add sample data to IndexedDB
+            for (const poi of pointsOfInterest) {
+                await addPOIToDB(poi);
+            }
+            
+            // Load points of interest
+            const loadedPOI = await getPOIFromDB();
+            renderNearbyPOI(loadedPOI.slice(0, 3));
+            
+            // Set up UI event listeners
+            setupEventListeners();
+            
+            // Start tour timer
+            startTourTimer();
+            
+            // Check online status
+            updateOnlineStatus();
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+            
+            // Request location access
+            requestLocation();
+        };
+        
+        // Render nearby points of interest
+        const renderNearbyPOI = (poiList) => {
+            const container = document.getElementById('nearby-list');
+            container.innerHTML = '';
+            
+            poiList.forEach(poi => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>${poi.name}</h3>
+                    <p>${poi.description}</p>
+                `;
+                container.appendChild(card);
+            });
+        };
+        
+        // Request location access
+        const requestLocation = () => {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        console.log("Location access granted:", position.coords);
+                        // In a real app, use position to find nearby POI
+                    },
+                    error => {
+                        console.log("Location access denied or error:", error);
+                    }
+                );
+            }
+        };
+        
+        // Set up UI event listeners
+        const setupEventListeners = () => {
+            // Coupon modal
+            document.getElementById('coupon-btn').addEventListener('click', () => {
+                openModal('coupon-modal');
+                renderCoupons();
+            });
+            
+            // Tour modal
+            document.getElementById('tour-btn').addEventListener('click', () => {
+                openModal('tour-modal');
+            });
+            
+            // Close modals
+            document.querySelectorAll('.close-btn').forEach(btn => {
+                btn.addEventListener('click', closeModals);
+            });
+            
+            // Map location markers
+            document.querySelectorAll('.location-marker').forEach(marker => {
+                marker.addEventListener('click', function() {
+                    const name = this.getAttribute('data-name');
+                    const desc = this.getAttribute('data-desc');
+                    alert(`${name}\n\n${desc}`);
+                });
+            });
+            
+            // Confirm tour booking
+            document.getElementById('confirm-tour').addEventListener('click', () => {
+                alert('Tour booked successfully! Check your email for confirmation.');
+                closeModals();
+            });
+            
+            // Add journal entry
+            document.getElementById('add-entry').addEventListener('click', () => {
+                const entry = prompt('Share your North Shore experience:');
+                if (entry && entry.trim() !== '') {
+                    addJournalEntry(entry);
+                }
+            });
+        };
+        
+        // Render coupons
+        /*const renderCoupons = () => {
+            const container = document.getElementById('coupon-list');
+            container.innerHTML = '';
+            
+            coupons.forEach(coupon => {
+                const item = document.createElement('div');
+                item.className = 'coupon-item';
+                item.innerHTML = `
+                    <h3>${coupon.business}</h3>
+                    <p><strong>Location:</strong> ${coupon.location}</p>
+                    <p>${coupon.info}</p>
+                    <p><strong>Code:</strong> ${coupon.code}</p>
+                `;
+                container.appendChild(item);
+            });
+        };*/
+        
+        // Add journal entry
+        const addJournalEntry = (text) => {
+            const container = document.getElementById('journal-entries');
+            const entry = document.createElement('div');
+            entry.className = 'journal-entry';
+            
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+            
+            entry.innerHTML = `
+                <div class="entry-header">
+                    <span class="entry-author">You</span>
+                    <span class="entry-date">${dateStr}</span>
+                </div>
+                <p>${text}</p>
+            `;
+            
+            container.insertBefore(entry, container.firstChild);
+        };
+        
+        // Start tour timer
+        const startTourTimer = () => {
+            // Tours every hour on the half hour
+            const now = new Date();
+            let nextTour = new Date(now);
+            
+            if (now.getMinutes() < 30) {
+                nextTour.setMinutes(30);
+            } else {
+                nextTour.setHours(nextTour.getHours() + 1);
+                nextTour.setMinutes(30);
+            }
+            
+            nextTour.setSeconds(0);
+            nextTour.setMilliseconds(0);
+            
+            const updateTimer = () => {
+                const now = new Date();
+                const diff = nextTour - now;
+                
+                if (diff <= 0) {
+                    // If the tour time has passed, set to next tour
+                    nextTour.setHours(nextTour.getHours() + 1);
+                    return updateTimer();
+                }
+                
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('tour-timer').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            };
+            
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        };
+        
+        // Open modal
+        const openModal = (modalId) => {
+            document.getElementById(modalId).style.display = 'flex';
+        };
+        
+        // Close modals
+        const closeModals = () => {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        };
+        
+        // Update online status indicator
+        const updateOnlineStatus = () => {
+            const offlineWarning = document.getElementById('offline-warning');
+            offlineWarning.style.display = navigator.onLine ? 'none' : 'block';
+        };
+        
+        // Register service worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }).catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+        
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
