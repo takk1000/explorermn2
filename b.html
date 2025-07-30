@@ -3,111 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>North Shore Explorer</title>
-    <meta name="description" content="Your guide to Minnesota's North Shore experiences">
+    <title>North Shore Explorer | Route Planner</title>
+    <meta name="description" content="Plan your North Shore adventure with our interactive route planner">
     <meta name="theme-color" content="#2c4c3b">
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTm9ydGggU2hvcmUgRXhwbG9yZXIiLCJzaG9ydF9uYW1lIjoiTm9ydGggU2hvcmUiLCJkZXNjcmlwdGlvbiI6IlRyYXZlbCBHdWlkZSBmb3IgTm9ydGggU2hvcmUsIE1OIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwidGhlbWVfY29sb3IiOiIjMmM0YzNiIiwiYmFja2dyb3VuZF9jb2xvciI6IiMyYzRjM2YiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFBRUFBQUFCQ0FZQUFBQmx0dHdKQUFBQUFYTlNSMElBcnM0YzZRQUFJQUJKUkVGVWVOeDdXWmhBUUFBQUFCSlJVNUVZR1p2QjJhMEFBQUFBQVdOQk1WRVVBQUFBRCIsInNpemVzIjoiNDh4NDgiLCJ0eXBlIjoiaW1hZ2UvcG5nIn1dfQ==">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
         :root {
             --primary: #2c4c3b;
             --secondary: #5d8b66;
             --accent: #c9a66b;
             --light: #f8f5f0;
             --dark: #1a1a1a;
-            --font-main: 'Helvetica Neue', Arial, sans-serif;
-            --font-heading: Georgia, 'Times New Roman', serif;
-            --spacing-xs: 0.5rem;
-            --spacing-sm: 1rem;
-            --spacing-md: 2rem;
-            --spacing-lg: 3rem;
-            --border-radius: 4px;
-            --shadow: 0 2px 10px rgba(0,0,0,0.1);
-            --transition: all 0.3s ease;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            --water: #4a90e2;
+            --green: #5d8b66;
+            --sand: #e6d2aa;
+            --rock: #9a8c75;
         }
         
         body {
-            font-family: var(--font-main);
+            background: linear-gradient(to bottom, #f0f7ff, #e6f2e6);
             color: var(--dark);
-            background-color: var(--light);
             line-height: 1.6;
-            padding-bottom: 60px;
+            min-height: 100vh;
+            padding-bottom: 80px;
         }
         
         header {
-            background-color: var(--primary);
+            background: linear-gradient(to right, var(--primary), var(--secondary));
             color: white;
-            padding: var(--spacing-sm);
+            padding: 1.2rem 2rem;
             text-align: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: var(--shadow);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        h1, h2, h3 {
-            font-family: var(--font-heading);
-            font-weight: normal;
-            margin-bottom: var(--spacing-sm);
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         
-        h1 {
+        .logo i {
             font-size: 1.8rem;
-            letter-spacing: 1px;
+            color: var(--accent);
         }
         
-        h2 {
+        .logo h1 {
             font-size: 1.5rem;
-            color: var(--primary);
-            border-bottom: 1px solid var(--accent);
-            padding-bottom: var(--spacing-xs);
-            margin-top: var(--spacing-md);
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
         
-        h3 {
-            font-size: 1.2rem;
-            color: var(--secondary);
-        }
-        
-        section {
-            padding: var(--spacing-md);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        p {
-            margin-bottom: var(--spacing-sm);
-        }
-        
-        .container {
-            padding: var(--spacing-sm);
+        .controls {
+            display: flex;
+            gap: 10px;
         }
         
         .btn {
-            display: inline-block;
             background-color: var(--accent);
             color: var(--dark);
-            padding: 0.8rem 1.5rem;
-            border-radius: var(--border-radius);
-            text-decoration: none;
-            font-weight: bold;
             border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-            margin: var(--spacing-xs) 0;
-            width: 100%;
-            max-width: 300px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
         
         .btn:hover {
             background-color: var(--primary);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn i {
+            font-size: 1.1rem;
         }
         
         .btn-secondary {
@@ -115,659 +102,595 @@
             color: white;
         }
         
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding: 2rem;
+            border-radius: 16px;
+            background: linear-gradient(rgba(44, 76, 59, 0.9), rgba(93, 139, 102, 0.85)), url('https://images.unsplash.com/photo-1598892294455-6f08769f7f3c?ixlib=rb-4.0.3') center/cover;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         .card {
             background: white;
-            border-radius: var(--border-radius);
-            padding: var(--spacing-sm);
-            margin-bottom: var(--spacing-sm);
-            box-shadow: var(--shadow);
+            border-radius: 16px;
+            padding: 1.8rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
         }
         
         .card h3 {
-            margin-top: 0;
+            color: var(--primary);
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card h3 i {
+            color: var(--accent);
+        }
+        
+        .poi-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .poi-item {
+            padding: 1.2rem;
+            border-radius: 12px;
+            background: var(--light);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .poi-item:hover {
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+        
+        .poi-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .poi-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .poi-icon i {
+            color: white;
+            font-size: 1.4rem;
+        }
+        
+        .poi-info {
+            flex-grow: 1;
+        }
+        
+        .poi-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+            color: var(--primary);
+        }
+        
+        .poi-info p {
+            font-size: 0.95rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .poi-info p i {
+            color: var(--accent);
         }
         
         .map-container {
-            width: 100%;
-            height: 300px;
-            background-color: #e9e5de;
-            border-radius: var(--border-radius);
-            margin: var(--spacing-sm) 0;
+            height: 500px;
+            border-radius: 16px;
             overflow: hidden;
+            background: var(--water);
             position: relative;
         }
         
-        .map-svg {
-            width: 100%;
-            height: 100%;
-        }
-        
-        .location-marker {
-            fill: var(--accent);
-            stroke: var(--primary);
-            stroke-width: 2;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .location-marker:hover {
-            fill: var(--primary);
-        }
-        
-        .flex-row {
-            display: flex;
-            gap: var(--spacing-sm);
-            flex-wrap: wrap;
-            margin: var(--spacing-sm) 0;
-        }
-        
-        .flex-item {
-            flex: 1;
-            min-width: 250px;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: flex-end;
-        }
-        
-        .modal-content {
-            background-color: white;
-            width: 90%;
-            max-width: 400px;
-            height: 100%;
-            padding: var(--spacing-md);
-            overflow-y: auto;
-            transform: translateX(100%);
-            animation: slideIn 0.3s forwards;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.2);
-        }
-        
-        @keyframes slideIn {
-            to { transform: translateX(0); }
-        }
-        
-        .close-btn {
+        .map-overlay {
             position: absolute;
-            top: var(--spacing-sm);
-            right: var(--spacing-sm);
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--dark);
-        }
-        
-        .coupon-item, .tour-item {
-            padding: var(--spacing-sm);
-            border-bottom: 1px solid #eee;
-        }
-        
-        .coupon-item:last-child, .tour-item:last-child {
-            border-bottom: none;
-        }
-        
-        select {
-        font-family: var(--font-main);
-        border: 1px solid #ddd;
-        border-radius: var(--border-radius);
-        background-color: white;
-        color: var(--dark);
-        cursor: pointer;
-        }
-        
-        select:focus {
-        outline: none;
-        border-color: var(--accent);
-        box-shadow: 0 0 0 2px rgba(201, 166, 107, 0.3);
-        }
-        
-        .timer {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(74, 144, 226, 0.8), rgba(93, 139, 102, 0.9));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
             text-align: center;
-            margin: var(--spacing-md) 0;
+            padding: 2rem;
         }
         
-        .journal-entry {
-            background: white;
-            padding: var(--spacing-sm);
-            margin-bottom: var(--spacing-sm);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
+        .map-overlay h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
-        .entry-header {
+        .map-overlay p {
+            max-width: 500px;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .route-display {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+        }
+        
+        .route-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: var(--spacing-xs);
+            align-items: center;
+            margin-bottom: 1.2rem;
         }
         
-        .entry-author {
+        .route-steps {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .route-step {
+            padding: 0.8rem;
+            border-left: 3px solid var(--accent);
+            margin-bottom: 0.8rem;
+            background: white;
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .step-number {
+            background: var(--accent);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
             font-weight: bold;
+            margin-top: 3px;
+        }
+        
+        .step-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
             color: var(--primary);
         }
         
-        .entry-date {
-            color: #777;
+        .step-info p {
             font-size: 0.9rem;
-        }
-        
-        .offline-warning {
-            background-color: #ffcc00;
-            color: var(--dark);
-            padding: var(--spacing-xs);
-            text-align: center;
-            font-size: 0.9rem;
+            color: #666;
         }
         
         footer {
-            background-color: var(--primary);
+            background: var(--primary);
             color: white;
             text-align: center;
-            padding: var(--spacing-sm);
+            padding: 1.5rem;
             position: fixed;
             bottom: 0;
             width: 100%;
         }
         
-        @media (min-width: 768px) {
-            .btn {
-                width: auto;
-            }
-            
-            .flex-row {
-                flex-wrap: nowrap;
-            }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.4s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification i {
+            font-size: 1.5rem;
+            color: var(--secondary);
+        }
+        
+        .progress-bar {
+            height: 5px;
+            background: var(--accent);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            border-radius: 0 0 8px 8px;
+            animation: progress 3s linear forwards;
+        }
+        
+        @keyframes progress {
+            from { width: 100%; }
+            to { width: 0; }
+        }
+        
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 2rem;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(93, 139, 102, 0.3);
+            border-top: 5px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .location-access {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .location-access i {
+            font-size: 2.5rem;
+            color: var(--accent);
         }
     </style>
 </head>
 <body>
-    <div id="offline-warning" class="offline-warning" style="display:none;">
-        You are currently offline. Some features may be limited.
-    </div>
-    
     <header>
-        <h1>North Shore Explorer</h1>
+        <div class="logo">
+            <i class="fas fa-mountain"></i>
+            <h1>North Shore Explorer</h1>
+        </div>
+        <div class="controls">
+            <button class="btn" id="save-btn">
+                <i class="fas fa-bookmark"></i> Save Route
+            </button>
+            <button class="btn btn-secondary" id="route-btn">
+                <i class="fas fa-route"></i> Plan Route
+            </button>
+        </div>
     </header>
     
-    <section>
-        <div class="map-container">
-            <svg class="map-svg" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
-                <!-- Simplified North Shore map -->
-                <path d="M50,150 C100,120 150,100 200,120 C250,140 300,180 350,170 C400,160 450,140 500,150 C550,160 600,190 650,200 C700,210 750,180 780,160" 
-                      fill="none" stroke="#5d8b66" stroke-width="4" stroke-linecap="round" />
+    <div class="container">
+        <div class="hero">
+            <h2>Discover Minnesota's North Shore</h2>
+            <p>Plan your perfect road trip along the scenic Lake Superior coastline with our interactive route planner</p>
+            <button class="btn btn-secondary" id="start-btn">
+                <i class="fas fa-play"></i> Start Adventure
+            </button>
+        </div>
+        
+        <div class="content">
+            <div class="card">
+                <h3><i class="fas fa-map-marker-alt"></i> Points of Interest</h3>
+                <div class="poi-list" id="poi-list">
+                    <!-- POI items will be generated here -->
+                </div>
+            </div>
+            
+            <div>
+                <div class="card">
+                    <h3><i class="fas fa-map"></i> Interactive Map</h3>
+                    <div class="map-container">
+                        <div class="map-overlay">
+                            <h3>Your North Shore Adventure</h3>
+                            <p>Click "Plan Route" to generate your personalized journey along Lake Superior's coastline</p>
+                            <button class="btn btn-secondary" id="map-route-btn">
+                                <i class="fas fa-route"></i> Generate Route
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 
-                <!-- Points of interest -->
-                <circle class="location-marker" cx="100" cy="120" r="8" data-name="Gooseberry Falls" data-desc="Spectacular waterfalls and hiking trails" />
-                <circle class="location-marker" cx="300" cy="180" r="8" data-name="Split Rock Lighthouse" data-desc="Historic lighthouse with stunning views" />
-                <circle class="location-marker" cx="500" cy="150" r="8" data-name="Tettegouche State Park" data-desc="Cliffs, inland lakes, and waterfalls" />
-                <circle class="location-marker" cx="650" cy="200" r="8" data-name="Grand Marais" data-desc="Artistic harbor town with great dining" />
-            </svg>
-        </div>
-        
-        <h2>Nearby Attractions</h2>
-        <div id="nearby-list">
-            <!-- Nearby locations will be populated here -->
-        </div>
-        
-        <div class="flex-row">
-            <div class="flex-item">
-                <button id="coupon-btn" class="btn">Local Coupons</button>
-            </div>
-            <div class="flex-item">
-                <button id="tour-btn" class="btn btn-secondary">Book a Tour</button>
-            </div>
-        </div>
-        
-        <h2>Travel Journal</h2>
-        <div id="journal-entries">
-            <div class="journal-entry">
-                <div class="entry-header">
-                    <span class="entry-author">Sarah J.</span>
-                    <span class="entry-date">June 15, 2025</span>
+                <div class="route-display">
+                    <div class="route-header">
+                        <h3><i class="fas fa-route"></i> Your Route</h3>
+                        <span id="distance">0 miles</span>
+                    </div>
+                    <div class="route-steps" id="route-steps">
+                        <div class="loading" id="route-loading">
+                            <div class="spinner"></div>
+                            <p>Generating your route...</p>
+                        </div>
+                        <div class="location-access" id="location-access">
+                            <i class="fas fa-location-dot"></i>
+                            <h4>Enable Location Services</h4>
+                            <p>Allow location access to create a personalized route starting from your current position</p>
+                            <button class="btn" id="enable-location-btn">
+                                <i class="fas fa-location-crosshairs"></i> Enable Location
+                            </button>
+                        </div>
+                        <!-- Route steps will be generated here -->
+                    </div>
                 </div>
-                <p>Hiked to High Falls at Grand Portage State Park - absolutely breathtaking! The trail was well-maintained and suitable for our 8-year-old.</p>
-            </div>
-            <div class="journal-entry">
-                <div class="entry-header">
-                    <span class="entry-author">Mike T.</span>
-                    <span class="entry-date">June 12, 2025</span>
-                </div>
-                <p>The guided kayak tour from Tofte was the highlight of our trip. Saw eagles and learned about the local ecosystem from our knowledgeable guide.</p>
             </div>
         </div>
-        
-        <button id="add-entry" class="btn">Add Your Experience</button>
-    </section>
-    
-<!-- Coupon Modal -->
-<div id="coupon-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>Local Coupons</h2>
-        <div class="card" style="background-color: var(--accent); color: var(--dark); margin-bottom: var(--spacing-md);">
-            <h3>North Shore Coupon Booklet</h3>
-            <p>Get our exclusive coupon booklet with over 50 discounts from local businesses!</p>
-            <p><strong>Only $19.99</strong> (saves $200+ on your trip)</p>
-            <button id="buy-booklet" class="btn" style="background-color: var(--primary); color: white;">Purchase Booklet</button>
-        </div>
-        <!--
-        <h3>Sample Coupons</h3>
-        <div id="coupon-list">
-            <!-- Coupons will be loaded here -->
-        <!--</div>
-        -->
     </div>
-</div>
     
-    <!-- Tour Modal -->
-    <!-- Tour Modal -->
-<div id="tour-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>Book a Tour</h2>
-        <div class="map-container">
-            <svg class="map-svg" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50,100 C150,80 250,120 350,100 C450,80 550,120 650,100" 
-                      fill="none" stroke="#c9a66b" stroke-width="6" stroke-linecap="round" stroke-dasharray="10,5" />
-                <circle cx="150" cy="80" r="8" fill="#c9a66b" />
-                <circle cx="350" cy="100" r="8" fill="#c9a66b" />
-                <circle cx="550" cy="120" r="8" fill="#c9a66b" />
-            </svg>
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <div>
+            <h4>Route Generated Successfully!</h4>
+            <p>Your North Shore adventure is ready</p>
         </div>
-        <div class="card">
-            <h3>Family North Shore Adventure</h3>
-            <p><strong>Meeting Place:</strong> Gooseberry Falls Visitor Center</p>
-            <p><strong>Tour Duration:</strong> 2 hours</p>
-            <p><strong>Price:</strong> $25 per adult, $15 per child</p>
-            
-            <label for="family-size" style="display: block; margin: var(--spacing-sm) 0 var(--spacing-xs);">Family Size:</label>
-            <select id="family-size" class="btn" style="width: 100%; padding: 0.8rem; margin-bottom: var(--spacing-sm);">
-                <option value="1a">1 Adult</option>
-                <option value="1a1c">1 Adult + 1 Child</option>
-                <option value="2a">2 Adults</option>
-                <option value="2a1c" selected>2 Adults + 1 Child</option>
-                <option value="2a2c">2 Adults + 2 Children</option>
-                <option value="2a3c">2 Adults + 3 Children</option>
-                <option value="large">Large Group (6+ people)</option>
-            </select>
-            
-            <p><strong>Next Tour:</strong></p>
-            <div class="timer" id="tour-timer">00:00:00</div>
-        </div>
-        <button id="confirm-tour" class="btn btn-secondary">Confirm Booking</button>
+        <div class="progress-bar"></div>
     </div>
-</div>
     
     <footer>
-        <p>© 2025 North Shore Explorer | Offline Ready</p>
+        <p>&copy; 2023 North Shore Explorer | Lake Superior's Premier Travel Guide</p>
     </footer>
     
     <script>
-        // App data stored in IndexedDB for offline use
-        const dbName = "NorthShoreDB";
-        const storeName = "PointsOfInterest";
-        
-        // Initialize database
-        let db;
-        const initDB = () => {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(dbName, 1);
-                
-                request.onupgradeneeded = (event) => {
-                    db = event.target.result;
-                    if (!db.objectStoreNames.contains(storeName)) {
-                        const store = db.createObjectStore(storeName, { keyPath: "id" });
-                        store.createIndex("name", "name", { unique: false });
-                        store.createIndex("location", "location", { unique: false });
-                    }
-                };
-                
-                request.onsuccess = (event) => {
-                    db = event.target.result;
-                    resolve(db);
-                };
-                
-                request.onerror = (event) => {
-                    reject("Error opening database");
-                };
-            });
-        };
-        
-        // Add data to IndexedDB
-        const addPOIToDB = (poi) => {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction([storeName], "readwrite");
-                const store = transaction.objectStore(storeName);
-                
-                const request = store.put(poi);
-                
-                request.onsuccess = () => resolve();
-                request.onerror = () => reject("Error adding POI");
-            });
-        };
-        
-        // Get data from IndexedDB
-        const getPOIFromDB = () => {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction([storeName], "readonly");
-                const store = transaction.objectStore(storeName);
-                const request = store.getAll();
-                
-                request.onsuccess = () => resolve(request.result);
-                request.onerror = () => reject("Error getting POI");
-            });
-        };
-        
-        // Sample Points of Interest data
-        const pointsOfInterest = [
-            {
-                id: 1,
-                name: "Gooseberry Falls",
-                description: "Spectacular waterfalls with hiking trails for all skill levels",
-                location: { lat: 47.142, lng: -91.466 },
-                category: "Nature"
-            },
-            {
-                id: 2,
-                name: "Split Rock Lighthouse",
-                description: "Historic lighthouse with stunning Lake Superior views",
-                location: { lat: 47.200, lng: -91.366 },
-                category: "Historic"
-            },
-            {
-                id: 3,
-                name: "Tettegouche State Park",
-                description: "Cliffs, inland lakes, and waterfalls in a pristine setting",
-                location: { lat: 47.231, lng: -91.359 },
-                category: "Nature"
-            },
-            {
-                id: 4,
-                name: "Grand Marais Art Colony",
-                description: "Art galleries and workshops in a picturesque harbor town",
-                location: { lat: 47.750, lng: -90.334 },
-                category: "Cultural"
-            },
-            {
-                id: 5,
-                name: "Superior Hiking Trail",
-                description: "300+ mile trail with breathtaking Lake Superior views",
-                location: { lat: 47.500, lng: -91.000 },
-                category: "Adventure"
-            }
+        // Predefined POI coordinates (sorted south-to-north)
+        const pois = [
+            {name: "Betty’s Pies", lat: 46.9942, lng: -91.6587, icon: "fas fa-pie", desc: "Famous pie shop with lake views"},
+            {name: "Two Harbors Lighthouse", lat: 46.9945, lng: -91.6585, icon: "fas fa-lighthouse", desc: "Historic lighthouse and B&B"},
+            {name: "Gooseberry Falls", lat: 47.1487, lng: -91.4685, icon: "fas fa-water", desc: "Spectacular waterfalls and hiking trails"},
+            {name: "Split Rock Lighthouse", lat: 47.1999, lng: -91.3668, icon: "fas fa-lighthouse", desc: "Iconic lighthouse on the cliffs"},
+            {name: "Iona’s Pink Beach", lat: 47.2575, lng: -91.2414, icon: "fas fa-umbrella-beach", desc: "Unique pink sand beach"},
+            {name: "Black Beach", lat: 47.2943, lng: -91.2575, icon: "fas fa-umbrella-beach", desc: "Striking black sand beach"},
+            {name: "Sugarloaf Cove", lat: 47.4321, lng: -91.0999, icon: "fas fa-tree", desc: "Nature center with hiking trails"},
+            {name: "Amethyst Mine", lat: 47.4478, lng: -91.0789, icon: "fas fa-gem", desc: "Mine tours and gem collecting"},
+            {name: "Lutsen Gondola", lat: 47.6541, lng: -90.6779, icon: "fas fa-mountain", desc: "Scenic mountain gondola ride"},
+            {name: "Adventure Park", lat: 47.6541, lng: -90.6779, icon: "fas fa-zipline", desc: "Aerial adventure courses"},
+            {name: "Superior Creamery", lat: 47.7505, lng: -90.3342, icon: "fas fa-ice-cream", desc: "Artisan ice cream shop"},
+            {name: "Artist’s Point", lat: 47.7475, lng: -90.3380, icon: "fas fa-palette", desc: "Scenic rocky peninsula"},
+            {name: "Folk School", lat: 47.7470, lng: -90.3370, icon: "fas fa-book", desc: "Traditional craft workshops"},
+            {name: "Grand Portage", lat: 47.9616, lng: -89.6846, icon: "fas fa-monument", desc: "Historic fur trade site"},
+            {name: "High Falls", lat: 48.0089, lng: -89.4865, icon: "fas fa-waterfall", desc: "Tallest waterfall in Minnesota"}
         ];
         
-        // Simulated coupon data (would normally come from Google Sheets)
-        const coupons = [
-            {
-                business: "Betty's Pies",
-                location: "1633 Highway 61, Two Harbors",
-                info: "15% off any pie purchase",
-                code: "NSX15"
-            },
-            {
-                business: "Cascade Lodge Restaurant",
-                location: "3719 MN-61, Lutsen",
-                info: "Free appetizer with two entrees",
-                code: "NSXAPP"
-            },
-            {
-                business: "Sven & Ole's Pizza",
-                location: "9 Wisconsin St, Grand Marais",
-                info: "Buy one pizza, get second 50% off",
-                code: "NSXPIZZA"
-            },
-            {
-                business: "Naniboujou Lodge",
-                location: "20 Naniboujou Trail, Grand Marais",
-                info: "$20 off any room booking",
-                code: "NSXROOM"
-            }
-        ];
-
-        // Buy coupon booklet
-        document.getElementById('buy-booklet').addEventListener('click', () => {
-            alert('Coupon booklet added to cart! Proceed to checkout to complete your purchase.');
-            closeModals();
-        });
-
-        // Update tour price based on family size
-      document.getElementById('family-size').addEventListener('change', function() {
-      const prices = {
-          '1a': '$25',
-          '1a1c': '$40',
-          '2a': '$50',
-          '2a1c': '$65',
-          '2a2c': '$80',
-          '2a3c': '$95',
-          'large': 'Contact for pricing'
-      };
-
-    const priceDisplay = document.querySelector('#tour-modal .card p:nth-of-type(3)');
-    priceDisplay.innerHTML = `<strong>Price:</strong> ${prices[this.value]}`;
-});
+        // DOM elements
+        const poiList = document.getElementById('poi-list');
+        const routeSteps = document.getElementById('route-steps');
+        const routeBtn = document.getElementById('route-btn');
+        const mapRouteBtn = document.getElementById('map-route-btn');
+        const startBtn = document.getElementById('start-btn');
+        const enableLocationBtn = document.getElementById('enable-location-btn');
+        const notification = document.getElementById('notification');
+        const routeLoading = document.getElementById('route-loading');
+        const locationAccess = document.getElementById('location-access');
+        const distanceEl = document.getElementById('distance');
         
-        // Initialize the app
-        const initApp = async () => {
-            // Initialize IndexedDB
-            await initDB();
-            
-            // Add sample data to IndexedDB
-            for (const poi of pointsOfInterest) {
-                await addPOIToDB(poi);
-            }
-            
-            // Load points of interest
-            const loadedPOI = await getPOIFromDB();
-            renderNearbyPOI(loadedPOI.slice(0, 3));
-            
-            // Set up UI event listeners
-            setupEventListeners();
-            
-            // Start tour timer
-            startTourTimer();
-            
-            // Check online status
-            updateOnlineStatus();
-            window.addEventListener('online', updateOnlineStatus);
-            window.addEventListener('offline', updateOnlineStatus);
-            
-            // Request location access
-            requestLocation();
-        };
-        
-        // Render nearby points of interest
-        const renderNearbyPOI = (poiList) => {
-            const container = document.getElementById('nearby-list');
-            container.innerHTML = '';
-            
-            poiList.forEach(poi => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <h3>${poi.name}</h3>
-                    <p>${poi.description}</p>
+        // Render POI list
+        function renderPoiList() {
+            poiList.innerHTML = '';
+            pois.forEach((poi, index) => {
+                const poiItem = document.createElement('div');
+                poiItem.className = 'poi-item';
+                poiItem.innerHTML = `
+                    <div class="poi-icon">
+                        <i class="${poi.icon}"></i>
+                    </div>
+                    <div class="poi-info">
+                        <h4>${poi.name}</h4>
+                        <p><i class="fas fa-map-pin"></i> ${poi.desc}</p>
+                        <p><i class="fas fa-arrow-up"></i> ${(poi.lat - pois[0].lat).toFixed(4)}° North</p>
+                    </div>
                 `;
-                container.appendChild(card);
-            });
-        };
-        
-        // Request location access
-        const requestLocation = () => {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    position => {
-                        console.log("Location access granted:", position.coords);
-                        // In a real app, use position to find nearby POI
-                    },
-                    error => {
-                        console.log("Location access denied or error:", error);
-                    }
-                );
-            }
-        };
-        
-        // Set up UI event listeners
-        const setupEventListeners = () => {
-            // Coupon modal
-            document.getElementById('coupon-btn').addEventListener('click', () => {
-                openModal('coupon-modal');
-                renderCoupons();
-            });
-            
-            // Tour modal
-            document.getElementById('tour-btn').addEventListener('click', () => {
-                openModal('tour-modal');
-            });
-            
-            // Close modals
-            document.querySelectorAll('.close-btn').forEach(btn => {
-                btn.addEventListener('click', closeModals);
-            });
-            
-            // Map location markers
-            document.querySelectorAll('.location-marker').forEach(marker => {
-                marker.addEventListener('click', function() {
-                    const name = this.getAttribute('data-name');
-                    const desc = this.getAttribute('data-desc');
-                    alert(`${name}\n\n${desc}`);
-                });
-            });
-            
-            // Confirm tour booking
-            document.getElementById('confirm-tour').addEventListener('click', () => {
-                alert('Tour booked successfully! Check your email for confirmation.');
-                closeModals();
-            });
-            
-            // Add journal entry
-            document.getElementById('add-entry').addEventListener('click', () => {
-                const entry = prompt('Share your North Shore experience:');
-                if (entry && entry.trim() !== '') {
-                    addJournalEntry(entry);
-                }
-            });
-        };
-        
-        // Render coupons
-        /*const renderCoupons = () => {
-            const container = document.getElementById('coupon-list');
-            container.innerHTML = '';
-            
-            coupons.forEach(coupon => {
-                const item = document.createElement('div');
-                item.className = 'coupon-item';
-                item.innerHTML = `
-                    <h3>${coupon.business}</h3>
-                    <p><strong>Location:</strong> ${coupon.location}</p>
-                    <p>${coupon.info}</p>
-                    <p><strong>Code:</strong> ${coupon.code}</p>
-                `;
-                container.appendChild(item);
-            });
-        };*/
-        
-        // Add journal entry
-        const addJournalEntry = (text) => {
-            const container = document.getElementById('journal-entries');
-            const entry = document.createElement('div');
-            entry.className = 'journal-entry';
-            
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric' 
-            });
-            
-            entry.innerHTML = `
-                <div class="entry-header">
-                    <span class="entry-author">You</span>
-                    <span class="entry-date">${dateStr}</span>
-                </div>
-                <p>${text}</p>
-            `;
-            
-            container.insertBefore(entry, container.firstChild);
-        };
-        
-        // Start tour timer
-        const startTourTimer = () => {
-            // Tours every hour on the half hour
-            const now = new Date();
-            let nextTour = new Date(now);
-            
-            if (now.getMinutes() < 30) {
-                nextTour.setMinutes(30);
-            } else {
-                nextTour.setHours(nextTour.getHours() + 1);
-                nextTour.setMinutes(30);
-            }
-            
-            nextTour.setSeconds(0);
-            nextTour.setMilliseconds(0);
-            
-            const updateTimer = () => {
-                const now = new Date();
-                const diff = nextTour - now;
-                
-                if (diff <= 0) {
-                    // If the tour time has passed, set to next tour
-                    nextTour.setHours(nextTour.getHours() + 1);
-                    return updateTimer();
-                }
-                
-                const hours = Math.floor(diff / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-                
-                document.getElementById('tour-timer').textContent = 
-                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            };
-            
-            updateTimer();
-            setInterval(updateTimer, 1000);
-        };
-        
-        // Open modal
-        const openModal = (modalId) => {
-            document.getElementById(modalId).style.display = 'flex';
-        };
-        
-        // Close modals
-        const closeModals = () => {
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.style.display = 'none';
-            });
-        };
-        
-        // Update online status indicator
-        const updateOnlineStatus = () => {
-            const offlineWarning = document.getElementById('offline-warning');
-            offlineWarning.style.display = navigator.onLine ? 'none' : 'block';
-        };
-        
-        // Register service worker for PWA functionality
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(registration => {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }).catch(err => {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
+                poiList.appendChild(poiItem);
             });
         }
         
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initApp);
+        // Show notification
+        function showNotification(message) {
+            notification.querySelector('h4').textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Generate route steps
+        function generateRouteSteps(userLat, userLng) {
+            routeSteps.innerHTML = '';
+            routeLoading.style.display = 'none';
+            
+            // Filter and sort POIs north of user
+            const northPois = pois
+                .filter(poi => poi.lat > userLat)
+                .sort((a, b) => a.lat - b.lat);
+            
+            if (northPois.length === 0) {
+                routeSteps.innerHTML = '<p>No POIs north of your location</p>';
+                return;
+            }
+            
+            // Add starting point
+            const startStep = document.createElement('div');
+            startStep.className = 'route-step';
+            startStep.innerHTML = `
+                <div class="step-number">1</div>
+                <div class="step-info">
+                    <h4>Your Location</h4>
+                    <p>Starting point of your journey</p>
+                </div>
+            `;
+            routeSteps.appendChild(startStep);
+            
+            // Add POIs
+            northPois.forEach((poi, index) => {
+                const step = document.createElement('div');
+                step.className = 'route-step';
+                step.innerHTML = `
+                    <div class="step-number">${index + 2}</div>
+                    <div class="step-info">
+                        <h4>${poi.name}</h4>
+                        <p>${poi.desc}</p>
+                    </div>
+                `;
+                routeSteps.appendChild(step);
+            });
+            
+            // Calculate approximate distance
+            const start = {lat: userLat, lng: userLng};
+            const end = northPois[northPois.length - 1];
+            const distance = calculateDistance(start, end);
+            distanceEl.textContent = `${distance} miles`;
+            
+            showNotification('Route Generated Successfully!');
+        }
+        
+        // Calculate distance between two points (simplified)
+        function calculateDistance(start, end) {
+            // Simplified calculation for demonstration
+            const latDiff = Math.abs(end.lat - start.lat);
+            const lngDiff = Math.abs(end.lng - start.lng);
+            const distance = Math.sqrt(latDiff*latDiff + lngDiff*lngDiff) * 70;
+            return distance.toFixed(1);
+        }
+        
+        // Add stops to Google Maps
+        function addStopsToGoogleMaps() {
+            if (!navigator.geolocation) {
+                alert("Geolocation not supported");
+                return;
+            }
+            
+            routeLoading.style.display = 'flex';
+            locationAccess.style.display = 'none';
+            
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+                    
+                    // Filter and sort POIs north of user
+                    const northPois = pois
+                        .filter(poi => poi.lat > userLat)
+                        .sort((a, b) => a.lat - b.lat);
+                    
+                    if (northPois.length === 0) {
+                        alert("No POIs north of your location");
+                        routeLoading.style.display = 'none';
+                        return;
+                    }
+                    
+                    // Generate Google Maps URL
+                    const origin = `${userLat},${userLng}`;
+                    const destination = northPois[northPois.length - 1];
+                    const waypoints = northPois.slice(0, -1);
+                    
+                    let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination.lat},${destination.lng}&travelmode=driving`;
+                    
+                    if (waypoints.length > 0) {
+                        url += `&waypoints=${waypoints.map(p => `${p.lat},${p.lng}`).join('|')}`;
+                    }
+                    
+                    // Generate route steps for display
+                    generateRouteSteps(userLat, userLng);
+                    
+                    // Open in Google Maps after a delay
+                    setTimeout(() => {
+                        window.open(url, '_blank');
+                    }, 1500);
+                },
+                error => {
+                    console.error("Geolocation error:", error);
+                    routeLoading.style.display = 'none';
+                    locationAccess.style.display = 'flex';
+                }
+            );
+        }
+        
+        // Event listeners
+        routeBtn.addEventListener('click', addStopsToGoogleMaps);
+        mapRouteBtn.addEventListener('click', addStopsToGoogleMaps);
+        startBtn.addEventListener('click', addStopsToGoogleMaps);
+        enableLocationBtn.addEventListener('click', addStopsToGoogleMaps);
+        
+        // Initialize the app
+        renderPoiList();
+        
+        // Hide loading after initial load
+        setTimeout(() => {
+            routeLoading.style.display = 'none';
+        }, 2000);
     </script>
 </body>
 </html>
