@@ -3,3 +3,53 @@
    target="_blank">
    Open Route in Apple Maps
 </a>
+
+<script>
+function openNavigation() {
+  const stops = [
+    "Betty’s Pies, Two Harbors, MN",
+    "Two One Ate, Silver Bay, MN",
+    "Gooseberry Falls State Park, Minnesota",
+    "Split Rock Lighthouse, Minnesota",
+    "Iona's Beach Scientific and Natural Area, MN",
+    "Black Beach, Silver Bay, MN",
+    "Sugarloaf Cove Nature Center, Schroeder, MN",
+    "Panorama Amethyst Mine, Thunder Bay, ON"
+  ];
+
+  // Detect Apple devices
+  const isAppleDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  if (isAppleDevice) {
+    // Apple Maps URL (up to 25 stops supported)
+    const appleParams = stops.map(stop => `daddr=${encodeURIComponent(stop)}`).join('&');
+    window.location.href = `https://maps.apple.com/?${appleParams}&dirflg=d`;
+  } else {
+    // Google Maps URL
+    const destination = stops.pop(); // Remove last stop for destination
+    const waypoints = stops.map(encodeURIComponent).join('|');
+    
+    const googleParams = new URLSearchParams({
+      api: '1',
+      destination: encodeURIComponent(destination),
+      travelmode: 'driving',
+      waypoints: waypoints
+    }).toString();
+    
+    window.open(`https://www.google.com/maps/dir/?${googleParams}`, '_blank');
+  }
+}
+</script>
+
+<button onclick="openNavigation()" style="
+  padding: 12px 24px;
+  font-size: 16px;
+  background: #007AFF;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+">
+  Open Road Trip Route
+</button>
